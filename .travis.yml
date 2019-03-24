@@ -1,0 +1,24 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t sadhwanim/react-test -f ./client/Dockerfile.dev ./client
+ 
+script:
+  - docker run sadhwanim/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t sadhwanim/multi-client ./client
+  - docker build -t sadhwanim/multi-server ./server
+  - docker build -t sadhwanim/multi-worker ./worker
+  - docker build -t sadhwanim/multi-nginx ./nginx
+
+    #pushing to docker hub
+    #login
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    #pushing images
+  - docker push sadhwanim/multi-client
+  - docker push sadhwanim/multi-server
+  - docker push sadhwanim/multi-worker
+  - docker push sadhwanim/multi-nginx
