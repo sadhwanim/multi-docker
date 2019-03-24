@@ -1,0 +1,37 @@
+{         
+   "AWSDockerrunVersion" : 2,
+   "containerDefinitions": [
+	   {
+	   "name": "client",
+	   "image": "sadhman/multi-client",
+	   "hostname": "client",
+	   "essential": false
+	   },
+	   {
+           "name": "server",
+           "image": "sadhman/multi-server",
+           "hostname": "api",
+           "essential": false
+           },
+	   {
+           "name": "worker",
+           "image": "sadhman/multi-worker",
+           "hostname": "worker",
+           "essential": false
+           },
+	   {
+           "name": "nginx",
+           "image": "sadhman/multi-nginx",
+	   "hostname": "nginx",
+           "essential": true,
+           "portMappings":[
+		   {
+			   "hostPort": 80,
+			   "containerPort": 80
+		   }
+	   ],
+	   "links": ["client","server"]
+           }
+   ]
+}
+
